@@ -1,35 +1,61 @@
 @model IEnumerable<ControlInventario.Models.Categoria>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categorías";
 }
 
-<h1>Index</h1>
+<div class="page-header">
+    <h1><i class="bi bi-tags me-2"></i>Categorías</h1>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>Nueva Categoría
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Nombre)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (!Model.Any())
+{
+    <div class="card-custom">
+        <div class="card-custom-body empty-state">
+            <i class="bi bi-bookmark"></i>
+            <p>No hay categorías registradas todavía.</p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i>Crear Primera Categoría
+            </a>
+        </div>
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <div class="card-custom">
+        <div class="card-custom-body p-0">
+            <table class="table-minimal">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-medium">
+                                <span class="badge-cat">@Html.DisplayFor(model => item.Nombre)</span>
+                            </td>
+                            <td class="text-end action-links">
+                                <a asp-action="Edit" asp-route-id="@item.Id" title="Editar">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.Id" title="Detalles">
+                                    <i class="bi bi-eye"></i> Detalles
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" title="Eliminar">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

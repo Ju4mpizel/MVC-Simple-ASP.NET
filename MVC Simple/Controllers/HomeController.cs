@@ -8,12 +8,7 @@ namespace MVC_Simple.Controllers
     {
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return RedirectToAction("Index", "Productos");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
