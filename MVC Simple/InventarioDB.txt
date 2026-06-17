@@ -1,0 +1,55 @@
+-- =======================================================
+-- SCRIPT DE CREACIÓN DE LA BASE DE DATOS: InventarioDB
+-- =======================================================
+
+-- 1. Si la base de datos ya existe, la cierra y la borra para empezar limpio
+USE master;
+GO
+
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'InventarioDB')
+BEGIN
+    ALTER DATABASE InventarioDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE InventarioDB;
+END
+GO
+
+-- 2. Crear la base de datos desde cero
+CREATE DATABASE InventarioDB;
+GO
+
+-- 3. Cambiar al contexto de nuestra nueva base de datos
+USE InventarioDB;
+GO
+
+-- 4. Crear la tabla de Categorías (Debe ir primero porque Productos depende de ella)
+CREATE TABLE Categorias (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Nombre VARCHAR(100) NOT NULL
+);
+GO
+
+-- 5. Crear la tabla de Productos con su relación (Llave Foránea)
+CREATE TABLE Productos (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Nombre VARCHAR(100) NOT NULL,
+    Precio DECIMAL(18,2) NOT NULL,
+    CategoriaId INT NOT NULL,
+    
+    -- Definimos la relación apuntando a la tabla Categorias
+    CONSTRAINT FK_Productos_Categorias FOREIGN KEY (CategoriaId) 
+        REFERENCES Categorias(Id)
+        ON DELETE CASCADE -- Si se borra una categoría, se borran sus productos (opcional)
+);
+GO
+
+-- =======================================================
+-- OPTATIVO: Inserción de datos de prueba (Semillas)
+-- =======================================================
+INSERT INTO Categorias (Nombre) VALUES ('Tecnología'), ('Hogar'), ('Alimentos');
+
+INSERT INTO Productos (Nombre, Precio, CategoriaId) VALUES 
+('Audífonos Gamer', 250.00, 1),
+('Teclado Mecánico', 450.00, 1),
+('Licuadora Oster', 380.00, 2),
+('Arroz Integral 1kg', 12.50, 3);
+GO
